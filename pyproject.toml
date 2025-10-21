@@ -1,0 +1,18 @@
+[project]
+name = "carbon-footprint"
+version = "0.1.0"
+description = "ETL Pipeline for carbon footprint evolution by country since 2010 based on the data provided by the Global Footprint Network"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+    { name = "gs-costa" }
+]
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = []

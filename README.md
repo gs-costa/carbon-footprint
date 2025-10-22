@@ -10,6 +10,8 @@ ETL Pipeline for carbon footprint evolution by country since 2010 based on the d
 - The checkpoint system allows the pipeline to be resilient to failures and can restart from the last successful state. Trigger to save checkpoint when process fails, finishes or is interrupted.
 - Don't storage valide years, because every request is good to know if there are new valide years
 - check if year have file for all countries, if not request countries separately
+- renamed columns to snake case, enforced types and selected columns, for consistency
+- converted schema to duckdb schema
 
 ## Limitations
 

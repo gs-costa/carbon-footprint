@@ -24,7 +24,7 @@ class GlobalFootprintNetworkEndpoints(BaseHTTPClient):
         super().__init__(self.BASE_URL, default_headers=self.default_headers)
         self.environment = Environment()
         self.auth_tuple = (self.environment.API_USERNAME, self.environment.API_KEY)
-        self.s3_repository = S3Repository(bucket_name=self.environment.BUCKET_NAME)
+        self.s3_repository = S3Repository(bucket_name=self.environment.RAW_PATH)
 
     def get_countries(self) -> list[dict]:
         """Get countries from the Global Footprint Network API."""

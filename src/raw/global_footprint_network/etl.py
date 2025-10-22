@@ -1,12 +1,13 @@
 from typing import Generator
 
 from src.common.checkpoint import Checkpoint
+from src.common.etl.functions.range_years import range_years
 from src.common.logger import Logger
 from src.raw.global_footprint_network.endpoints import GlobalFootprintNetworkEndpoints
 from src.repositories.aws.s3 import S3Repository
 
 
-class GlobalFootprintNetworkETL(GlobalFootprintNetworkEndpoints):
+class GlobalFootprintNetworkRaw(GlobalFootprintNetworkEndpoints):
     """ETL for the Global Footprint Network API."""
 
     logger = Logger(__name__)
@@ -14,8 +15,8 @@ class GlobalFootprintNetworkETL(GlobalFootprintNetworkEndpoints):
     def __init__(self):
         super().__init__(self)
         self.ingestion_errors: list[str] = []
-        self.checkpoint = Checkpoint(bucket_name=self.environment.BUCKET_NAME)
-        self.s3_repository = S3Repository(bucket_name=self.environment.BUCKET_NAME)
+        self.checkpoint = Checkpoint(bucket_name=self.environment.RAW_PATH)
+        self.s3_repository = S3Repository(bucket_name=self.environment.RAW_PATH)
 
     def get_countries_codes(self, countries: list[dict]) -> list[dict]:
         """Create a sorted list of countries codes from the countries list. Exclude "all" country code."""
@@ -23,11 +24,6 @@ class GlobalFootprintNetworkETL(GlobalFootprintNetworkEndpoints):
             country["countryCode"] for country in countries if country["countryCode"] != self.CODE_COUNTRY_ALL
         ]
         return sorted(list_countries_codes)
-
-    def range_years(self, start_year: int, end_year: int) -> list[int]:
-        """Create a sorted list of years between start and end year."""
-        date_range = range(start_year, end_year + 1)
-        return sorted(list(date_range))
 
     def __is_year_valide(self, year: int, valide_years: list[int]) -> bool:
         if year not in valide_years:
@@ -57,7 +53,7 @@ class GlobalFootprintNetworkETL(GlobalFootprintNetworkEndpoints):
     ) -> Generator[tuple[int, str, list[dict]], None, None]:
         """Get data from the Global Footprint Network API."""
 
-        years = self.range_years(start_year, end_year)
+        years = range_years(start_year, end_year)
         valide_years = self.get_years()
         checkpoint = self.checkpoint.get_checkpoint()
         if self.environment.CHECKPOINT and checkpoint:
@@ -118,5 +114,5 @@ class GlobalFootprintNetworkETL(GlobalFootprintNetworkEndpoints):
 
 
 if __name__ == "__main__":
-    client = GlobalFootprintNetworkETL()
+    client = GlobalFootprintNetworkRaw()
     client.execute()

@@ -9,4 +9,5 @@ class Environment:
     START_YEAR = int(os.getenv("START_YEAR", 2010))
     END_YEAR = int(os.getenv("END_YEAR", datetime.now().year))
     CHECKPOINT = os.getenv("CHECKPOINT", "True").lower() == "true"
-    BUCKET_NAME = os.getenv("BUCKET_NAME", "bucket")
+    RAW_PATH = os.getenv("RAW_PATH", "raw")
+    DATABASE_PATH = os.getenv("DATABASE_PATH", "database.db")

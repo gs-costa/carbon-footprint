@@ -112,7 +112,7 @@ class GlobalFootprintNetworkAPIRequest(GlobalFootprintNetworkEndpoints):
             if last_successful_year and last_successful_country:
                 self.checkpoint.save_checkpoint(year=last_successful_year, country_code=last_successful_country)
 
-        self.__load_ingestion_errors()
+            self.__load_ingestion_errors()
 
 
 if __name__ == "__main__":

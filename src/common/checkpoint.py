@@ -1,6 +1,6 @@
 from typing import Any
 
-from src.repositories.aws.s3 import S3Repository
+from src.common.repositories.aws.s3 import S3Repository
 
 
 class Checkpoint(S3Repository):

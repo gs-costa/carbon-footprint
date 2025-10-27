@@ -5,7 +5,7 @@ from src.common.logger import Logger
 
 
 class DuckDBRepository:
-    """Repository for DuckDB database."""
+    """Repository for DuckDB database, local testing for Snowflake."""
 
     logger = Logger(__name__)
 

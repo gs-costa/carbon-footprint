@@ -6,7 +6,7 @@ from src.common.environment import Environment
 from src.common.etl.functions import enforce_types, range_years
 from src.common.etl.mixins.file_system import FileSystemETLMixin
 from src.common.logger import Logger
-from src.repositories.duckdb import DuckDBRepository
+from src.common.repositories.snowflake.duckdb import DuckDBRepository
 from src.trusted.global_footprint_network.schema import GlobalFootprintNetworkSchema
 
 

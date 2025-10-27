@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from src.clients.base_http import BaseHTTPClient
+from src.common.clients.base_http import BaseHTTPClient
 from src.common.environment import Environment
 from src.common.logger import Logger
-from src.repositories.aws.s3 import S3Repository
+from src.common.repositories.aws.s3 import S3Repository
 
 
 class GlobalFootprintNetworkEndpoints(BaseHTTPClient):

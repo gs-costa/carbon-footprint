@@ -3,20 +3,22 @@ from typing import Generator
 from src.common.checkpoint import Checkpoint
 from src.common.etl.functions.range_years import range_years
 from src.common.logger import Logger
+from src.common.repositories.aws.s3 import S3Repository
 from src.raw.global_footprint_network.endpoints import GlobalFootprintNetworkEndpoints
-from src.repositories.aws.s3 import S3Repository
+from src.raw.global_footprint_network.ingestion import GlobalFootprintNetworkIngestion
 
 
-class GlobalFootprintNetworkRaw(GlobalFootprintNetworkEndpoints):
+class GlobalFootprintNetworkAPIRequest(GlobalFootprintNetworkEndpoints):
     """ETL for the Global Footprint Network API."""
 
     logger = Logger(__name__)
 
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
         self.ingestion_errors: list[str] = []
         self.checkpoint = Checkpoint(bucket_name=self.environment.RAW_PATH)
         self.s3_repository = S3Repository(bucket_name=self.environment.RAW_PATH)
+        self.ingestion = GlobalFootprintNetworkIngestion()
 
     def get_countries_codes(self, countries: list[dict]) -> list[dict]:
         """Create a sorted list of countries codes from the countries list. Exclude "all" country code."""
@@ -97,9 +99,9 @@ class GlobalFootprintNetworkRaw(GlobalFootprintNetworkEndpoints):
                 countries_codes=countries_codes,
                 start_year=self.environment.START_YEAR,
                 end_year=self.environment.END_YEAR,
-            ):
+            ):  # Lambda 1 API request - using generator to simulate messages to SQS, and avoid memory issues
                 file_path = f"{self.DATA}/{year}/{country_code}.{self.FILE_FORMAT}"
-                self.s3_repository.upload_file(file_path=file_path, data=data)
+                self.ingestion.load(file_path=file_path, data=data)  # Lambda 2 ingestion
 
                 last_successful_year = year
                 last_successful_country = country_code
@@ -114,5 +116,5 @@ class GlobalFootprintNetworkRaw(GlobalFootprintNetworkEndpoints):
 
 
 if __name__ == "__main__":
-    client = GlobalFootprintNetworkRaw()
+    client = GlobalFootprintNetworkAPIRequest()
     client.execute()

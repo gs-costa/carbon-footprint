@@ -1,6 +1,9 @@
 # carbon-footprint
 ETL Pipeline for carbon footprint evolution by country since 2010 based on the data provided by the Global Footprint Network.
 
+## Suggested archicteture
+
+![Architecture Diagram](archicteture/download.png)
 ## Decisions
 
 - When getting carbon footprint from api, decided to separate countries update from footprint, because it is not necessary to update countries everytime
